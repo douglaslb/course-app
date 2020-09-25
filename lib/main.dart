@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nac_cursos/screens/curso_details_screen.dart';
 import 'package:nac_cursos/screens/curso_home_screen.dart';
 
 void main() async {
@@ -31,7 +32,11 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Worksans',
         platform: TargetPlatform.iOS,
       ),
-      home: CursoHomeScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => CursoHomeScreen(),
+        '/details': (context) => CursoDetailsScreen()
+      },
     );
   }
 }

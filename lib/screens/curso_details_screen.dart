@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nac_cursos/models/curso_model.dart';
 
 class CursoDetailsScreen extends StatefulWidget {
   @override
@@ -13,6 +15,9 @@ class _CursoDetailsScreenState extends State<CursoDetailsScreen>
   double opacity1 = 0.0;
   double opacity2 = 0.0;
   double opacity3 = 0.0;
+
+  CursoModel cursoModel;
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -42,6 +47,7 @@ class _CursoDetailsScreenState extends State<CursoDetailsScreen>
 
   @override
   Widget build(BuildContext context) {
+    cursoModel = ModalRoute.of(context).settings.arguments;
     final double tempHeight = MediaQuery.of(context).size.height -
         (MediaQuery.of(context).size.width / 1.2) +
         24.0;
@@ -55,7 +61,7 @@ class _CursoDetailsScreenState extends State<CursoDetailsScreen>
               children: <Widget>[
                 AspectRatio(
                   aspectRatio: 1.2,
-                  child: Image.asset('assets/images/webInterFace.png'),
+                  child: Image.network(cursoModel.imageUrl),
                 ),
               ],
             ),
@@ -94,7 +100,7 @@ class _CursoDetailsScreenState extends State<CursoDetailsScreen>
                             padding: const EdgeInsets.only(
                                 top: 32.0, left: 18, right: 16),
                             child: Text(
-                              'Web Design\nCourse',
+                              cursoModel.name,
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
@@ -112,7 +118,7 @@ class _CursoDetailsScreenState extends State<CursoDetailsScreen>
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  'R\$28.99',
+                                  'R\$ ${cursoModel.price}',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w200,
@@ -125,7 +131,7 @@ class _CursoDetailsScreenState extends State<CursoDetailsScreen>
                                   child: Row(
                                     children: <Widget>[
                                       Text(
-                                        '4.3',
+                                        cursoModel.rate.toString(),
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w200,
@@ -152,9 +158,11 @@ class _CursoDetailsScreenState extends State<CursoDetailsScreen>
                               padding: const EdgeInsets.all(8),
                               child: Row(
                                 children: <Widget>[
-                                  getTimeBoxUI('24', 'aulas'),
-                                  getTimeBoxUI('2 horas', 'tempo'),
-                                  getTimeBoxUI('24', 'lugares'),
+                                  getTimeBoxUI(
+                                      cursoModel.lessons.toString(), 'aulas'),
+                                  getTimeBoxUI(
+                                      '${cursoModel.duration} horas', 'tempo'),
+                                  getTimeBoxUI('${cursoModel.sits}', 'lugares'),
                                 ],
                               ),
                             ),
@@ -167,7 +175,7 @@ class _CursoDetailsScreenState extends State<CursoDetailsScreen>
                                 padding: const EdgeInsets.only(
                                     left: 16, right: 16, top: 8, bottom: 8),
                                 child: Text(
-                                  'Lorem ipsum is simply dummy text of printing & typesetting industry, Lorem ipsum is simply dummy text of printing & typesetting industry.',
+                                  cursoModel.description,
                                   textAlign: TextAlign.justify,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w200,
@@ -175,7 +183,7 @@ class _CursoDetailsScreenState extends State<CursoDetailsScreen>
                                     letterSpacing: 0.27,
                                     color: Color(0xFF3A5160),
                                   ),
-                                  maxLines: 3,
+                                  maxLines: 10,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
@@ -220,7 +228,16 @@ class _CursoDetailsScreenState extends State<CursoDetailsScreen>
                                           ),
                                         ),
                                         onPressed: () {
-                                          print('Garatiu carai');
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  "Vaga garantida com sucesso! :)",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.SNACKBAR,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: Color.fromRGBO(
+                                                  76, 76, 76, 0.9),
+                                              textColor: Colors.white,
+                                              fontSize: 14.0);
                                         },
                                       ),
                                     ),
@@ -255,10 +272,18 @@ class _CursoDetailsScreenState extends State<CursoDetailsScreen>
                     width: 60,
                     height: 60,
                     child: Center(
-                      child: Icon(
-                        Icons.favorite,
+                      child: new IconButton(
+                        icon: Icon(Icons.favorite),
                         color: Color(0xFFFFFFFF),
-                        size: 30,
+                        iconSize: 30,
+                        onPressed: () => Fluttertoast.showToast(
+                            msg: "Curso adicionado aos favoritos! :)",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.SNACKBAR,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Color.fromRGBO(76, 76, 76, 0.9),
+                            textColor: Colors.white,
+                            fontSize: 14.0),
                       ),
                     ),
                   ),

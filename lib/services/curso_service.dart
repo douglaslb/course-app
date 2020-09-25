@@ -17,7 +17,6 @@ class CursoService {
       if (response.statusCode == 200) {
         response.data.forEach(
           (value) {
-            print(value);
             list.add(
               CursoModel.fromMap(value),
             );

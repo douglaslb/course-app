@@ -101,9 +101,10 @@ class CategoryView extends StatelessWidget {
                 0.0, 50 * (1.0 - animation.value), 0.0),
             child: InkWell(
               splashColor: Colors.transparent,
-              onTap: () {
-                callback();
-              },
+              onTap: () async {
+                await Navigator.pushNamed(context, '/details',
+                    arguments: cursoModel);
+              }, // aqui é o clique do item da lista
               child: SizedBox(
                 height: 280,
                 child: Stack(
