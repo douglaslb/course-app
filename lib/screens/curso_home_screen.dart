@@ -1,5 +1,5 @@
 import 'package:nac_cursos/screens/curso_details_screen.dart';
-import 'package:nac_cursos/screens/widget/cursos_list_view.dart';
+import 'package:nac_cursos/screens/widget/curso_listview.dart';
 import 'package:nac_cursos/main.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +30,6 @@ class _CursoHomeScreenState extends State<CursoHomeScreen> {
                   child: Column(
                     children: <Widget>[
                       getSearchBarUI(),
-                      getCategoryUI(),
                       Flexible(
                         child: getPopularCourseUI(),
                       ),
@@ -45,21 +44,6 @@ class _CursoHomeScreenState extends State<CursoHomeScreen> {
     );
   }
 
-  Widget getCategoryUI() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const SizedBox(
-          height: 16,
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-      ],
-    );
-  }
-
   Widget getPopularCourseUI() {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, left: 18, right: 16),
@@ -67,16 +51,6 @@ class _CursoHomeScreenState extends State<CursoHomeScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            'Todos os cursos',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 22,
-              letterSpacing: 0.27,
-              color: Color(0xFF253840),
-            ),
-          ),
           Flexible(
             child: CursosListView(
               callBack: () {

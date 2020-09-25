@@ -1,6 +1,7 @@
 import 'package:nac_cursos/models/curso_model.dart';
 import 'package:nac_cursos/main.dart';
 import 'package:flutter/material.dart';
+import 'package:nac_cursos/screens/widget/curso_listview_loading.dart';
 import 'package:nac_cursos/services/curso_service.dart';
 
 class CursosListView extends StatefulWidget {
@@ -32,7 +33,7 @@ class _CursosListViewState extends State<CursosListView>
         future: cursoService.findAll(),
         builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           if (!snapshot.hasData) {
-            return const SizedBox();
+            return CursoListViewLoading();
           } else {
             return GridView(
               padding: const EdgeInsets.only(bottom: 120),
