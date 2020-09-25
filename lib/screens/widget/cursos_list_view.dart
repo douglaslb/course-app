@@ -1,6 +1,7 @@
-import 'package:nac_cursos/models/category.dart';
+import 'package:nac_cursos/models/curso_model.dart';
 import 'package:nac_cursos/main.dart';
 import 'package:flutter/material.dart';
+import 'package:nac_cursos/services/curso_service.dart';
 
 class CursosListView extends StatefulWidget {
   const CursosListView({Key key, this.callBack}) : super(key: key);
@@ -13,6 +14,9 @@ class CursosListView extends StatefulWidget {
 class _CursosListViewState extends State<CursosListView>
     with TickerProviderStateMixin {
   AnimationController animationController;
+
+  CursoService cursoService = CursoService();
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -20,29 +24,24 @@ class _CursosListViewState extends State<CursosListView>
     super.initState();
   }
 
-  Future<bool> getData() async {
-    await Future<dynamic>.delayed(const Duration(milliseconds: 200));
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
-      child: FutureBuilder<bool>(
-        future: getData(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+      child: FutureBuilder<List>(
+        future: cursoService.findAll(),
+        builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
           if (!snapshot.hasData) {
             return const SizedBox();
           } else {
             return GridView(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.only(bottom: 120),
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.vertical,
               children: List<Widget>.generate(
-                Category.popularCourseList.length,
+                snapshot.data.length,
                 (int index) {
-                  final int count = Category.popularCourseList.length;
+                  final int count = snapshot.data.length;
                   final Animation<double> animation =
                       Tween<double>(begin: 0.0, end: 1.0).animate(
                     CurvedAnimation(
@@ -56,7 +55,7 @@ class _CursosListViewState extends State<CursosListView>
                     callback: () {
                       widget.callBack();
                     },
-                    category: Category.popularCourseList[index],
+                    cursoModel: snapshot.data[index],
                     animation: animation,
                     animationController: animationController,
                   );
@@ -79,14 +78,14 @@ class _CursosListViewState extends State<CursosListView>
 class CategoryView extends StatelessWidget {
   const CategoryView(
       {Key key,
-      this.category,
+      this.cursoModel,
       this.animationController,
       this.animation,
       this.callback})
       : super(key: key);
 
   final VoidCallback callback;
-  final Category category;
+  final CursoModel cursoModel;
   final AnimationController animationController;
   final Animation<dynamic> animation;
 
@@ -143,7 +142,7 @@ class CategoryView extends StatelessWidget {
                                                       minWidth: 50,
                                                       maxWidth: 110),
                                                   child: Text(
-                                                    category.title,
+                                                    cursoModel.name,
                                                     textAlign: TextAlign.left,
                                                     style: TextStyle(
                                                       fontWeight:
@@ -201,7 +200,7 @@ class CategoryView extends StatelessWidget {
                                                   CrossAxisAlignment.center,
                                               children: <Widget>[
                                                 Text(
-                                                  '${category.lessonCount} lesson',
+                                                  '${cursoModel.lessons} aulas',
                                                   textAlign: TextAlign.left,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w200,
@@ -214,7 +213,7 @@ class CategoryView extends StatelessWidget {
                                                   child: Row(
                                                     children: <Widget>[
                                                       Text(
-                                                        '${category.rating}',
+                                                        '${cursoModel.rate}',
                                                         textAlign:
                                                             TextAlign.left,
                                                         style: TextStyle(
@@ -263,19 +262,13 @@ class CategoryView extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(16.0)),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                  color: Color(0xFF3A5160).withOpacity(0.2),
-                                  offset: const Offset(0.0, 0.0),
-                                  blurRadius: 6.0),
-                            ],
                           ),
                           child: ClipRRect(
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(16.0)),
                             child: AspectRatio(
                                 aspectRatio: 1.28,
-                                child: Image.asset(category.imagePath)),
+                                child: Image.network(cursoModel.imageUrl)),
                           ),
                         ),
                       ),
